@@ -1,5 +1,3 @@
-// TODO: Clean code lol.
-// TODO: Replace \n with << endl;
 #include <iostream>
 #include <stdlib.h>
 #include <chrono> 
@@ -30,48 +28,53 @@ double compute_average(std::vector<int>& vi) {
 }
 
 int main(int argc, char* argv[]) {
-	// if the user is on anything but windows tell them it might not work (which it doesnt)
-	// TODO: Use colors
-#if defined(_WIN32) || defined(_WIN64)
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-#elif defined(linux)
-	cout << "You are running on a linux system. Some things may be broken. as this is a native app to windows.\n";
-#elif defined(__unix__)
-	cout << "You are running on a unix system. Some things may be broken. as this is a native app to windows.\n";
-#else
-	cout << "You are not running windows. Some things may be broken. as this is a native app to windows.\n";
-#endif
+	// if the user is on anything but windows tell them it might not work
+	#ifdef _WIN32
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	int count = 0;
 	int lastdur = 0;
 	const char* output = "";
 
 	// if there are too few arguments then print usage message
-	// TODO: Make it actually tell if you didnt do something good with the arguments.
 	if (argc < 2) {
-		cout << "Incorrect usage. \n-o [filename]\tWrite output to file\n-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 1000 funny.exe [this runs funny.exe 1000 times and writes the output to Output.txt and the console.]";
+		cout << "Incorrect usage: \n\t-o [filename]\tWrite output to file\n\t-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 100 funny.exe [this runs funny.exe 100 times and writes the output to Output.txt and the console.]";
 		return 0;
-	}
+	} 
+
 	// loop through the arguments
-	for (int i = 0; i < sizeof(argv) + 1; i++)
+	for (int i = 0; i < argc; ++i)
 	{
 		// if the argument is -o set output to next argument
 		if (strcmp(argv[i], "-o") == 0) {
 			output = argv[i + 1];
 		}
-		// if the argument is -c set the count to next argument
+		// checks if -c is supplied an integer
 		if (strcmp(argv[i], "-c") == 0) {
-			count = atoi(argv[i + 1]);
+			char *temp;
+			strtol(argv[i + 1], &temp, 0);
+			if (*temp != '\0'){
+				cerr << "Incorrect usage:\n\t-c should only be provided with an integer." << endl;
+				return -1;
+			} else {
+				// set the count to next argument after the -c
+				count = atoi(argv[i + 1]);
+			}
 		}
 	}
+
 	// if the count is less than or equal to 0 set it to 100
 	if (count <= 0) {
 		cout << "Count was not defined. Defaulting to 100.\n";
 		count = 100;
+	} else {
+		cout << "Looping " << count << " times." << endl;
 	}
 	// if the ouput is set to nothing, set it to logs.txt
 	if (output == "") {
 		cout << "Output was not defined. Defaulting to logs.txt.\n";
 		output = "logs.txt";
+	} else {
+		cout << "Output is " << output << "." << endl;
 	}
 
 	// open the output file and write title
@@ -79,20 +82,31 @@ int main(int argc, char* argv[]) {
 	outputStream.open(output);
 	outputStream << "--==Begin ProcRuntime Logs==--\n";
 
-
+	char file[100];
 	// set the file to the last argument
-	const char* file = argv[sizeof(argv) + 1];
-	cout << "Running " << file << " " << count << " times. and writing output to ";
-	cout << output << "\n";
+	if (argv[argc - 1][0] == '.' || argv[argc - 1][0] == '/'){
+		strcpy(file, argv[argc - 1]);
+	} else {
+		strcpy(file, "./");
+		strcat(file, argv[argc - 1]);
+	}
+
+	//TODO: check if file is accesible, and use ask for super user/administrator in that case.
+	ifstream ifile(file);
+	if (!(bool)ifile){
+		cerr << "Incorrect usage:\n\tWas provided with an invalid or unreadable file. Check the file path to make sure it is correct." << endl;
+		return -1;
+	}
+	
+	cout << "Running " << file << " " << count << " times.\n";
 	// loop however many times count is
-	for (int i = 0; i <= count; ++i) {
+	for (int i = 1; i <= count; ++i) {
 		// set start to the time now
 		auto start = high_resolution_clock::now();
-	
-		//execute file 
-		// TODO: Get a better solution to system(); because just the call to system probably takes alot of time
-		system(file);
 		
+		//execute file 
+		system(file);
+
 		//set stop time to the current time
 		auto stop = high_resolution_clock::now();
 
