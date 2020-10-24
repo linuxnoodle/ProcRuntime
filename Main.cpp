@@ -1,4 +1,5 @@
 // TODO: Clean code lol.
+// TODO: Replace \n with << endl;
 #include <iostream>
 #include <stdlib.h>
 #include <chrono> 
@@ -30,11 +31,13 @@ double compute_average(std::vector<int>& vi) {
 
 int main(int argc, char* argv[]) {
 	// if the user is on anything but windows tell them it might not work (which it doesnt)
-	// TODO: 
-#ifdef _WIN32
+	// TODO: Use colors
+#if defined(_WIN32) || defined(_WIN64)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-#elif defined ___linux___
-	cout << "You are running linux. Some things may be broken. as this is a native app to windows.\n";
+#elif defined(linux)
+	cout << "You are running on a linux system. Some things may be broken. as this is a native app to windows.\n";
+#elif defined(__unix__)
+	cout << "You are running on a unix system. Some things may be broken. as this is a native app to windows.\n";
 #else
 	cout << "You are not running windows. Some things may be broken. as this is a native app to windows.\n";
 #endif
@@ -45,11 +48,11 @@ int main(int argc, char* argv[]) {
 	// if there are too few arguments then print usage message
 	// TODO: Make it actually tell if you didnt do something good with the arguments.
 	if (argc < 2) {
-		cout << "Incorrect usage. \n-o [filename]\tWrite output to file\n-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 100 funny.exe [this runs funny.exe 100 times and writes the output to Output.txt and the console.]";
+		cout << "Incorrect usage. \n-o [filename]\tWrite output to file\n-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 1000 funny.exe [this runs funny.exe 1000 times and writes the output to Output.txt and the console.]";
 		return 0;
 	}
 	// loop through the arguments
-	for (int i = 0; i < argc + 1; i++)
+	for (int i = 0; i < sizeof(argv) + 1; i++)
 	{
 		// if the argument is -o set output to next argument
 		if (strcmp(argv[i], "-o") == 0) {
@@ -79,7 +82,8 @@ int main(int argc, char* argv[]) {
 
 	// set the file to the last argument
 	const char* file = argv[sizeof(argv) + 1];
-	cout << "Running " << file << " " << count << " times.\n";
+	cout << "Running " << file << " " << count << " times. and writing output to ";
+	cout << output << "\n";
 	// loop however many times count is
 	for (int i = 0; i <= count; ++i) {
 		// set start to the time now
