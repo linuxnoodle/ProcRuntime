@@ -85,13 +85,16 @@ int main(int argc, char* argv[]) {
 
 	char file[100];
 	// set the file to the last argument
-	if (argv[argc - 1][0] == '.' || argv[argc - 1][0] == '/'){
+    #ifdef _WIN32
 		strcpy(file, argv[argc - 1]);
-	} else {
-		strcpy(file, "./");
-		strcat(file, argv[argc - 1]);
-	}
-
+    #else
+        if (argv[argc - 1][0] == '.' || argv[argc - 1][0] == '/'){
+            strcpy(file, argv[argc - 1]);
+        } else {
+            strcpy(file, "./");
+            strcat(file, argv[argc - 1]);
+        }
+    #endif
 	//TODO: check if file is accesible, and use ask for super user/administrator in that case.
 	ifstream ifile(file);
 	if (!(bool)ifile){
@@ -99,7 +102,7 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	
-	cout << "Running " << file << " " << count << " times.\n";
+	cout << "Running " << file << " " << count << " time(s).\n";
 	// loop however many times count is
 	for (int i = 1; i <= count; ++i) {
 		// set start to the time now
