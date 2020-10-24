@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
 	// if the user is on anything but windows tell them it might not work
 	#ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	#endif
 	int count = 0;
 	int lastdur = 0;
 	const char* output = "";
