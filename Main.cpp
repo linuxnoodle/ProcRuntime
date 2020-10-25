@@ -28,9 +28,12 @@ double compute_average(std::vector<int>& vi) {
 }
 
 int main(int argc, char* argv[]) {
-	// if the user is on anything but windows tell them it might not work
+	cout << "This is an open source project https://github.com/Waves-rgb/ProcRuntime/. if you find any issues or have an idea please submit them."
+	
 	#ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	#else
+		cout << "You are not running windows! things may be broken, if so please submit an issue on the github page.";
 	#endif
 	int count = 0;
 	int lastdur = 0;
