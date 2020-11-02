@@ -1,5 +1,5 @@
 # ProcRuntime
-[![Status](https://travis-ci.com/Waves-rgb/ProcRuntime.svg?branch=main)(https://travis-ci.com/github/Waves-rgb/ProcRuntime)]
+[![Status](https://travis-ci.com/Waves-rgb/ProcRuntime.svg?branch=main)](https://travis-ci.com/github/Waves-rgb/ProcRuntime)
 
 Command line utility to check how fast programs are running.
 
