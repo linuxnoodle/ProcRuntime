@@ -1,6 +1,17 @@
 # ProcRuntime
-Command line utility to check how fast programs are running. it's probably very inaccurate. It tries to be os compatable, but is not.
+![Status](https://travis-ci.com/Waves-rgb/ProcRuntime.svg?branch=main)
 
-usage: `ProcRuntime.exe -c 1000 -o runtimelog.txt app.exe`
+Command line utility to check how fast programs are running.
 
-compile: `c++ ./Main.cpp -o ./ProcRuntime.exe` also probably wont work, you can grab yourself a windows copy on the releases page.
+OS support:
+ - Windows
+ - Linux (arch tested)
+
+TODO:
+ - [ ] Add support for macOS
+ - [ ] Add color coding to console
+ - [ ] Find a better alternative to `system();`
+
+usage: `ProcRuntime.exe -c 1000 -o runtimelog.txt app.exe` this runs app.exe 1000 times and writes logs to runtimelog.txt
+
+compile: `c++ ./Main.cpp -o ./ProcRuntime.exe`
