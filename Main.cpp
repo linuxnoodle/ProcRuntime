@@ -28,12 +28,12 @@ double compute_average(std::vector<int>& vi) {
 }
 
 int main(int argc, char* argv[]) {
-	cout << "This is an open source project https://github.com/Waves-rgb/ProcRuntime/. if you find any issues or have an idea please submit them.";
+	cout << "This is an open source project https://github.com/Waves-rgb/ProcRuntime/. if you find any issues or have an idea please submit them.\n";
 	
 	#ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	#else
-		cout << "You are not running windows! things may be broken, if so please submit an issue on the github page.";
+		cout << "You are not running windows! things may be broken, if so please submit an issue on the github page.\n";
 	#endif
 	int count = 0;
 	int lastdur = 0;
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
 	// if there are too few arguments then print usage message
 	if (argc < 2) {
-		cout << "Incorrect usage: \n\t-o [filename]\tWrite output to file\n\t-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 100 funny.exe [this runs funny.exe 100 times and writes the output to Output.txt and the console.]";
+		cout << "Incorrect usage: \n\t-o [filename]\tWrite output to file\n\t-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 100 funny.exe [this runs funny.exe 100 times and writes the output to Output.txt and the console.\n]";
 		return 0;
 	} 
 
