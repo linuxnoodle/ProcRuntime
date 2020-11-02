@@ -1,5 +1,5 @@
 # ProcRuntime
-![Status](https://travis-ci.com/Waves-rgb/ProcRuntime.svg?branch=main)
+![Status](https://travis-ci.com/Waves-rgb/ProcRuntime.svg?branch=main)(https://travis-ci.com/github/Waves-rgb/ProcRuntime)
 
 Command line utility to check how fast programs are running.
 
@@ -12,6 +12,7 @@ TODO:
  - [ ] Add color coding to console
  - [ ] Find a better alternative to `system();`
 
-usage: `ProcRuntime.exe -c 1000 -o runtimelog.txt app.exe` this runs app.exe 1000 times and writes logs to runtimelog.txt
+Usage: `ProcRuntime.exe -c 1000 -o runtimelog.txt app.exe`
+> this runs app.exe 1000 times and writes logs to runtimelog.txt
 
-compile: `c++ ./Main.cpp -o ./ProcRuntime.exe`
+Compile: `c++ ./Main.cpp -o ./ProcRuntime.exe`
