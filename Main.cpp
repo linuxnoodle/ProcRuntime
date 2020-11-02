@@ -28,7 +28,7 @@ double compute_average(std::vector<int>& vi) {
 }
 
 int main(int argc, char* argv[]) {
-	cout << "This is an open source project https://github.com/Waves-rgb/ProcRuntime/. if you find any issues or have an idea please submit them."
+	cout << "This is an open source project https://github.com/Waves-rgb/ProcRuntime/. if you find any issues or have an idea please submit them.";
 	
 	#ifdef _WIN32
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
