@@ -16,3 +16,4 @@ Usage: `ProcRuntime.exe -c 1000 -o runtimelog.txt app.exe`
 > this runs app.exe 1000 times and writes logs to runtimelog.txt
 
 Compile: `c++ ./Main.cpp -o ./ProcRuntime.exe`
+> this compiles Main.cpp into ProcRuntime.exe.
