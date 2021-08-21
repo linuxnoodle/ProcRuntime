@@ -1,24 +1,17 @@
-#include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <chrono> 
 #include <fstream>
 #include <vector>
 #include <cstring>
 
-// if on windows include windows header for Console handle for colors
-// TODO: Use Colors.
-#ifdef _WIN32
-	#include <Windows.h>
-#endif
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+#include <fmt/color.h>
 
 std::vector<int> durations;
 
-using namespace std::chrono;
-using namespace std;
-
 // get the average of all the elements in a vector, tbh idk how it works
 double compute_average(std::vector<int>& vi) {
-
 	double sum = 0;
 	for (int p : vi) {
 		sum = sum + p;
@@ -38,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 	// if there are too few arguments then print usage message
 	if (argc < 2) {
-		cout << "Incorrect usage: \n\t-o [filename]\tWrite output to file\n\t-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o Output.txt -c 100 funny.exe [this runs funny.exe 100 times and writes the output to Output.txt and the console.]";
+		fmt::print("Incorrect usage: \n\t-o [filename]\tWrite output to file\n\t-c [times]\tThe amount of times to run the program.\n\nExample: runtime -o output.txt -c 100 test.exe (this runs test.exe 100 times and writes the output to both output.txt and stdout.)\n");
 		return 0;
 	} 
 
@@ -54,7 +47,7 @@ int main(int argc, char* argv[]) {
 			char *temp;
 			strtol(argv[i + 1], &temp, 0);
 			if (*temp != '\0'){
-				cerr << "Incorrect usage:\n\t-c should only be provided with an integer." << endl;
+        		fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "Incorrect usage:\n\tCount should only be an integer.\n");
 				return -1;
 			} else {
 				// set the count to next argument after the -c
@@ -65,21 +58,21 @@ int main(int argc, char* argv[]) {
 
 	// if the count is less than or equal to 0 set it to 100
 	if (count <= 0) {
-		cout << "Count was not defined. Defaulting to 100.\n";
+		fmt::print("Count was not defined. Defaulting to 100.\n");
 		count = 100;
 	} else {
-		cout << "Looping " << count << " times." << endl;
+		fmt::print("Looping {} times.\n", count);
 	}
 	// if the ouput is set to nothing, set it to logs.txt
-	if (output == "") {
-		cout << "Output was not defined. Defaulting to logs.txt.\n";
+	if (strcmp(output, "") == 0) {
+		fmt::print("Output was not defined. Defaulting to logs.txt.\n");
 		output = "logs.txt";
 	} else {
-		cout << "Output is " << output << "." << endl;
+		fmt::print("Output is {}.\n", output);
 	}
 
 	// open the output file and write title
-	ofstream outputStream;
+	std::ofstream outputStream;
 	outputStream.open(output);
 	outputStream << "--==Begin ProcRuntime Logs==--\n";
 
@@ -96,44 +89,45 @@ int main(int argc, char* argv[]) {
         }
     #endif
 	//TODO: check if file is accesible, and use ask for super user/administrator in that case.
-	ifstream ifile(file);
+	std::ifstream ifile(file);
 	if (!(bool)ifile){
-		cerr << "Incorrect usage:\n\tWas provided with an invalid or unreadable file. Check the file path to make sure it is correct." << endl;
+        fmt::print(stderr, fmt::emphasis::bold | fg(fmt::color::red), "Incorrect usage:\n\tWas provided with an invalid or unreadable file. Check the file path to make sure it is correct.\n");
 		return -1;
 	}
 	
-	cout << "Running " << file << " " << count << " time(s).\n";
+	fmt::print("Running {} {} time(s).\n", file, count);
 	// loop however many times count is
 	for (int i = 1; i <= count; ++i) {
 		// set start to the time now
-		auto start = high_resolution_clock::now();
+		auto start = std::chrono::high_resolution_clock::now();
 		
 		//execute file 
 		system(file);
 
 		//set stop time to the current time
-		auto stop = high_resolution_clock::now();
+		auto stop = std::chrono::high_resolution_clock::now();
 
 		// set the duration to the difference of start and stop
-		auto duration = duration_cast<microseconds>(stop - start);
+		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 		// if the last time equals the current
 		if (lastdur == duration.count()) {
-			cout << "[/] Execution " << i << " took " << duration.count() << " Microseconds. Same as last run.\n";
-			outputStream << "[/] Execution " << i << " took " << duration.count() << " Microseconds. Same as last run.\n";
+			fmt::print(fg(fmt::color::yellow), "[/] Execution {} took {} microseconds. Same as last run.\n", i, duration.count());
+			// Using old writing for files, becuase ofstream can't be easily converted to a FILE*
+			outputStream << "[/] Execution " << i << " took " << duration.count() << " microseconds. Same as last run.\n";
 		}
 		// if the last time is less than current
 		else if (lastdur < duration.count()) {
-			cout << "[-] Execution " << i << " took " << duration.count() << " Microseconds. " << duration.count() - lastdur << " Microseconds slower from last run.\n";
-			outputStream << "[-] Execution " << i << " took " << duration.count() << " Microseconds. " << duration.count() - lastdur << " Microseconds slower from last run.\n";
+			fmt::print(fg(fmt::color::red), "[/] Execution {} took {} microseconds. {} microseconds slower than last run.\n", i, duration.count(), duration.count() - lastdur);
+			outputStream << "[-] Execution " << i << " took " << duration.count() << " Microseconds. " << duration.count() - lastdur << " microseconds slower than last run.\n";
 		}
 		// if the last time is greater than current
 		else if (lastdur > duration.count()) {
-			cout << "[+] Execution " << i << " took " << duration.count() << " Microseconds. " << lastdur - duration.count() << " Microseconds faster than last run. \n";
+			fmt::print(fg(fmt::color::green), "[/] Execution {} took {} microseconds. {} microseconds faster than last run.\n", i, duration.count(), lastdur - duration.count());
 			outputStream << "[+] Execution " << i << " took " << duration.count() << " Microseconds. " << lastdur - duration.count() << " Microseconds faster than last run. \n";
 		}
 		// anything else
 		else {
-			cout << "[?] Execution " << i << " took " << duration.count() << " Microseconds.\n";
+			fmt::print(fg(fmt::color::yellow), "[/] Execution {} took {} microseconds.\n", i, duration.count());
 			outputStream << "[?] Execution " << i << " took " << duration.count() << " Microseconds.\n";
 		}
 		// push the time to the durations vector and set the last duration to the current
@@ -144,9 +138,8 @@ int main(int argc, char* argv[]) {
 	// get average of the durations
 	float f = compute_average(durations);
 
-	cout << "Calculating average time...";
-	cout << "\rAverage runtime of " << file << " is " << f << " Microseconds (" << f / 1000.f << " MS).\n";
-	outputStream << "Average runtime of " << file << " is " << f << " Microseconds (" << f / 1000.f << " MS).\n";
+	fmt::print("Calculating average time...\n");
+	fmt::print("\rAverage runtime of {} is {} Microseconds ({} ms).\n", file, f, f / 1000.0f);
 	
 	// write footer, close file, and exit program.
 	outputStream << "--==End ProcRuntime Logs==--\n";
