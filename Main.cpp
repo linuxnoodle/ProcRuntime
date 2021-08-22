@@ -8,6 +8,10 @@
 #include <fmt/core.h>
 #include <fmt/color.h>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 std::vector<int> durations;
 
 // get the average of all the elements in a vector, tbh idk how it works
